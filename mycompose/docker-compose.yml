@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db_ghost:
+      image: mysql:5.7
+      volumes:
+        - mysql_storage_new:/var/lib/mysql
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: rootpass
+        MYSQL_USER: kanika
+        MYSQL_PASSWORD: redhat
+        MYSQL_DATABASE: mydbb
+
+
+
+  ghostos:
+      image: ghost:latest
+      restart: always
+      depends_on:
+        - db_ghost
+      ports:    
+        - 8081:2368
+      
+      environment:
+        database_client: mysql
+        database_connection_host: db_ghost
+        database_connection_user: kanika
+        database_connection_password: redhat
+        database_connection_database: mydbb
+      volumes:
+        - gh_storage_new:/var/lib/ghost
+ 
+
+volumes:
+    mysql_storage_new:
+    gh_storage_new:
